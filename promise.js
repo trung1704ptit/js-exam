@@ -88,3 +88,17 @@ let p = new Promise((resolve, reject) => {
 }).catch(error => {
   console.error("Catch error:", error.message)
 })
+
+
+// promise chain
+
+func()
+  .then((x) => {
+    return anotherFunc(x)
+  })
+  .then((y) => {
+    return moreOtherFunc(y)
+  })
+  .then(i => {
+    return i
+  })
