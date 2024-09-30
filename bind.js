@@ -25,3 +25,11 @@ const person2 = {
 
 
 const introPerson = person2.intro.bind(person2, "test")
+
+
+// implement bind method:
+function bind(context, func) {
+  return function(...args) {
+    func.apply(context, args)
+  }
+}
