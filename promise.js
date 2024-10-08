@@ -41,15 +41,15 @@ promise.then((value) => {
 
 // chaining promise:
 fetch("http://api.com/example")
-.then(res => res.json())
-.then(data => {
-  console.log(data);
-  return fetch("https://other-api/other-data")
-})
-.then(res => res.json())
-.then(otherData => {
-  console.log(otherData)
-}).catch(error => console.log(error))
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+    return fetch("https://other-api/other-data")
+  })
+  .then(res => res.json())
+  .then(otherData => {
+    console.log(otherData)
+  }).catch(error => console.log(error))
 
 
 // Promise static methods:
