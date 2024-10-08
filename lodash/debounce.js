@@ -10,6 +10,9 @@ function debounce(func, delay) {
   }
 }
 
+
+/// how to test it
+
 function performQuery(query) {
   console.log("Searching for query:", query)
 }
