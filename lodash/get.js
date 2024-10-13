@@ -6,7 +6,7 @@ function get(obj, path, defaultVal) {
 
   for (let key of keys) {
     // Check if the key exists in the current object
-    if (current !== null && current !== undefined && key in current) {
+    if (current && key in current) {
       current = current[key]; // Update current to the next nested value
     } else {
       return defaultVal; // Return the default value if key does not exist

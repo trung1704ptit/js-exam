@@ -1,3 +1,8 @@
+/**
+ * Debounce Ensures that a function is only called after a certain delay has passed since the last time the user stopped typing.
+ * It waits until the user has finished typing (or paused) for a specified time before making the API call.
+ */
+
 function debounce(func, delay) {
   let timeoutId;
 
