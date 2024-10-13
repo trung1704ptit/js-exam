@@ -102,3 +102,34 @@ func()
   .then(i => {
     return i
   })
+
+
+
+Promise.all()
+
+/**
+ * Promise.all it will return resolve if all promises resolved, reject if one of promises rejected.
+ */
+
+
+Promise.allSettled()
+/**
+ * Promise.allSettled it will return a list of promise for all resolves and rejects.
+ * we can get all resolves and rejects from allSettled method.
+ *
+ */
+
+
+Promise.race()
+/**
+ * Returns a promise that resolves or rejects as soon as one of the promises in the array resolves or rejects.
+ * 
+*/
+
+
+Promise.any()
+/**
+ * Returns a promise that resolves as soon as any of the promises is fulfilled,
+ * If all of the promises are rejected, it rejects with an AggregateError
+ * 
+ */
