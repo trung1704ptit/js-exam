@@ -18,7 +18,7 @@ _.get(object, 'a.b.c', 'default');
 function get(obj, path, defaultVal) {
   // if path is string, we need to handle both dot and bracket notation
   if (typeof path === "string") {
-    path = path.replace(/\[(\d+)]/g, ".$1").split(".");
+    path = path.replace(/\[(\d+)\]/g, '.$1').split('.');
   }
   let result = obj;
 
@@ -35,3 +35,17 @@ function get(obj, path, defaultVal) {
   }
   return result;
 }
+
+path = path.replace("", "")
+
+// a[0].b.c
+
+/*
+  a[0].b.c   => paths = [a, 0, b, c]
+
+  #1: a.0.b.c
+  #2  [a, 0, b, c]
+
+  path  = "a[0].b.c"
+  path = path.replace(/\[(\d+)\]/g, ".$1")
+*/
