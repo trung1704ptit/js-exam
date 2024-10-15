@@ -18,12 +18,12 @@ _.get(object, 'a.b.c', 'default');
 function get(obj, path, defaultVal) {
   // if path is string, we need to handle both dot and bracket notation
   if (typeof path === "string") {
-    path = path.replace(/\[(\d+)]/g, '.$1').split(".")
+    path = path.replace(/\[(\d+)]/g, ".$1").split(".");
   }
-  let result = obj
+  let result = obj;
 
-  for (let i =0; i< path.length; i ++) {
-    const key =  path[i]
+  for (let i = 0; i < path.length; i++) {
+    const key = path[i];
 
     const keyAsNumber = isNaN(key) ? key : Number(key);
 
