@@ -64,6 +64,9 @@ Promise.all([promise1, promise2, promise3]).then(values => {
   console.log(values) // [3, 42, "Foo"]
 })
 
+
+
+
 // Promise Race: return a promise that resolves or rejects as soon as one of the promises in the iterable resolves or rejects, with the value or reason for that promise.
 let promise12 = new Promise((resolve, reject) => {
   setTimeout(resolve, 500, "one")
@@ -116,6 +119,7 @@ Promise.allSettled()
 /**
  * Promise.allSettled it will return a list of promise for all resolves and rejects.
  * we can get all resolves and rejects from allSettled method.
+ * allSettled: will never run in to "catch" block, all will run though "then" block
  *
  */
 
