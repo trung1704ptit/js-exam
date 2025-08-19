@@ -63,3 +63,6 @@ orders(order_id, customer_id, amount)
 customers(id, customer_name)
 */
 
+select o.order_id, o.amount, c.customer_id
+from orders o
+left join customers c on o.customer_id = c.id

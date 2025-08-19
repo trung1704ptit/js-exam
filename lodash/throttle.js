@@ -15,7 +15,7 @@ function throttle(func, delay) {
     }
 
     lastCall = now;
-    return func(...args)
+    func(...args)
   }
 }
 
