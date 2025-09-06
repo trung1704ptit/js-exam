@@ -66,3 +66,24 @@ customers(id, customer_name)
 select o.order_id, o.amount, c.customer_id
 from orders o
 left join customers c on o.customer_id = c.id
+
+
+
+-- Transaction
+BEGIN;
+UPDATE accounts SET balance = balance - 100 WHERE id = 'A'
+UPDATE accounts SET balance = balance + 100 WHERE id = 'B'
+COMMIT;
+
+
+--  Index DB:
+SELECT *
+FROM transaction_history
+WHERE user_id = 123
+ORDER BY created_at DESC
+LIMIT 10;
+
+CREATE INDEX idx_user_created
+ON transaction_history(user_id, created_at DESC)
+-- Index này giống như “mục lục” theo (user_id, created_at).
+-- DB có thể nhảy thẳng tới các record của user 123, lấy ra 10 record mới nhất → cực nhanh.
