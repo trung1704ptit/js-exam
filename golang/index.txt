@@ -1,0 +1,365 @@
+1. Why use Golang?
+
+Go is simple, fast, and highly concurrent. It compiles to native code, has great performance like C,
+but with modern features like garbage collection, built-in concurrency, and strong tooling.
+It’s great for backend, distributed systems, and microservices.
+
+2. Concurrency in Golang
+
+Concurrency in Go is achieved using goroutines and channels. Goroutines are lightweight threads managed by
+the Go runtime, and channels allow safe communication between them.
+
+3. What is a channel?
+
+A channel is a built-in data structure used to communicate between goroutines.
+It allows you to send and receive values safely without using explicit locks.
+
+4. Difference between buffered and unbuffered channels
+
+An unbuffered channel blocks the sender until the receiver receives the value.
+A buffered channel allows sending values up to its capacity without blocking.
+
+5. Explain method & interface
+
+A method is a function with a receiver, attached to a type.
+An interface defines a set of method signatures; any type that implements those methods automatically satisfies the interface.
+
+6. What is a slice?
+
+A slice is a dynamic, flexible view into an underlying array. It has a length and capacity and can grow or shrink easily compared to arrays.
+
+7. Pointer in Go
+
+A pointer stores the memory address of a value. It allows you to modify the value at that address directly, which helps avoid copying large data.
+
+8. How to stop a Go program safely
+
+Use a context with cancellation (context.WithCancel) or graceful shutdown pattern with signal handling (e.g., os/signal.Notify) to stop goroutines and close resources properly.
+
+9. Difference between map and struct
+
+A map is a dynamic key-value store with runtime keys.
+A struct is a fixed type that defines known fields at compile time.
+
+10 What is a race condition?
+
+A race condition happens when multiple goroutines access and modify the same variable concurrently without synchronization, leading to unpredictable behavior.
+
+11 What is a deadlock?
+
+A deadlock occurs when goroutines are waiting for each other to release resources or send/receive from a channel, so none of them can proceed.
+
+12 What is gRPC?
+
+gRPC is a high-performance, language-agnostic RPC framework based on HTTP/2 and Protocol Buffers. It supports streaming, authentication, and is commonly used for microservices.
+
+13 What are generics in Golang?
+
+Generics allow you to write functions and data structures that work with any type using type parameters. It helps reduce code duplication while keeping type safety.
+
+14 What is defer used for?
+
+defer schedules a function to run after the current function finishes — often used for cleanup, like closing files or unlocking mutexes.
+
+15 select in Golang
+
+The select statement lets a goroutine wait on multiple channel operations. It’s like a switch, but for channels.
+
+16 When to use panic?
+
+Use panic for unrecoverable errors or programmer mistakes — not for normal error handling. Prefer error returns in most cases.
+
+17 How to write unit tests
+
+Create a file ending with _test.go, use functions like func TestXxx(t *testing.T), and use t.Run, t.Errorf, or assert libraries to verify expected results.
+
+18 Common cases of memory leak
+
+Leaks happen when:
+
+Goroutines never exit (blocked forever)
+
+Channels are not closed
+
+Large slices or maps keep references to unused data
+
+Infinite loops holding memory
+
+19 Graceful shutdown design in Go
+
+Use context.Context with signal.NotifyContext to capture system signals (SIGINT, SIGTERM), cancel all running goroutines, close channels, and release resources before exiting.
+
+20 Garbage collection
+
+Go’s garbage collector automatically frees unused memory. It’s concurrent and non-blocking, optimized for low latency.
+
+21 Explain Go runtime & scheduler
+
+The Go runtime manages goroutines, memory, and garbage collection.
+The scheduler maps thousands of goroutines (G) onto OS threads (M) using a set of logical processors (P) — called the G-M-P model.
+
+22 Why use Gin framework (or others)
+
+Gin is lightweight, fast, and easy to use. It provides routing, middleware, and JSON handling with minimal overhead — ideal for building REST APIs.
+
+23 How to monitor RAM
+
+Use runtime.ReadMemStats() to read memory usage, or external tools like pprof or prometheus to monitor live metrics.
+
+24 Manual heap management to improve performance
+
+Reduce heap usage by reusing objects (e.g., using sync.Pool), avoiding unnecessary allocations, and minimizing pointer usage when possible.
+
+25 Does Golang support OOP?
+
+Yes, but not classical OOP. Go supports encapsulation, composition, and interfaces, but not inheritance. It favors composition over inheritance.
+
+26 Latest version of Golang
+
+As of 2025, the latest stable version is Go 1.23 (released August 2025). (You can double-check at go.dev/dl
+).
+
+27 Difference between nil and empty slice
+
+A nil slice has no underlying array and length 0.
+An empty slice has length 0 but points to an allocated array.
+Both behave similarly, but nil uses no memory.
+
+28 Why use channels to pass data instead of direct function call
+
+Channels provide safe synchronization between goroutines. Direct calls don’t handle concurrency or communication safely — channels prevent race conditions.
+
+29 How to concatenate strings
+
+Use + operator for simple joins, or strings.Builder for efficient concatenation in loops.
+
+30 Difference between data race and race condition
+
+A data race is a specific type of race condition that occurs when multiple goroutines read/write the same variable without synchronization.
+A race condition is a broader term — any timing-dependent bug in concurrent code.
+
+31 What is a nil channel used for?
+
+A nil channel blocks forever on send/receive. It’s often used to disable channel cases dynamically inside a select statement.
+
+32 How to handle time zone–related data issues
+
+Always store timestamps in UTC in the database and convert to the user’s local time zone only when displaying data. Use time.LoadLocation() for conversion.
+
+
+
+
+1. General Database Architecture
+
+Q: When should you choose SQL vs NoSQL?
+✅ A:
+Use SQL when data is structured, relationships are complex, and transactions require ACID compliance — for example, financial or banking systems.
+Use NoSQL when scalability, flexible schema, and high write throughput are important — such as social media feeds or IoT data.
+
+Q: Compare PostgreSQL, MySQL, and MongoDB.
+✅ A:
+
+PostgreSQL: Advanced SQL features, strong ACID compliance, and JSONB support for semi-structured data.
+
+MySQL: Simple, fast, widely supported by many frameworks, best for lightweight relational use.
+
+MongoDB: Document-oriented, schema-less, horizontally scalable, great for dynamic content and unstructured data.
+
+Q: Why use replicas or sharding?
+✅ A:
+
+Replication: Replication means copying the same data to multiple database nodes. Improve availability and read scalability, and provide fault tolerance.
+One node is usually the primary (leader) that handles all writes.
+Other nodes are replicas (followers) that handle reads or standby failover.
+
+Sharding: Sharding means splitting the data across multiple databases (nodes). Handle large datasets and high write throughput that a single node can’t handle.
+Each shard contains a portion of the total data.
+
+⚙️ 2. Scaling & Performance
+
+Q: What’s the difference between vertical and horizontal scaling?
+✅ A:
+
+Vertical scaling: Add more CPU, RAM, or SSD to a single machine — simple but limited by hardware.
+
+Horizontal scaling: Add more servers and distribute load — more complex but allows infinite scaling.
+
+Q: What is sharding, and when do you need it?
+✅ A:
+Sharding splits large datasets into smaller partitions (shards), each stored on a different database node.
+It’s needed when a single database cannot handle read/write throughput or data size.
+
+Q: How do you prevent shard hotspots?
+✅ A:
+Avoid sequential shard keys (like timestamps). Use a hash-based shard key, or a range + hash hybrid to evenly distribute traffic.
+
+Q: How does caching improve database performance?
+✅ A:
+Caching stores frequently accessed data in memory (e.g., Redis, Memcached). This reduces latency, minimizes DB queries, and improves system throughput.
+
+Q: When should you denormalize data?
+✅ A:
+Denormalize when your system is read-heavy and you need to reduce complex joins, especially in analytics or dashboard queries.
+
+🧩 3. Consistency, Availability & Partitioning (CAP Theorem)
+
+Q: Explain the CAP theorem.
+✅ A:
+A distributed system can only guarantee two out of three:
+
+Consistency: All clients see the same data.
+
+Availability: System always responds.
+
+Partition tolerance: System continues working during network failures.
+Example:
+Cassandra = AP
+MongoDB (configurable) = CP or AP
+SQL DBs = CA
+
+Q: What’s the difference between strong and eventual consistency?
+✅ A:
+Strong consistency: Reads always return the latest write.
+Eventual consistency: Data may be temporarily inconsistent but will converge over time. Used in distributed, high-availability systems like DynamoDB.
+
+Q: What are distributed transactions?
+✅ A:
+Transactions that span multiple databases or services. Managed using Two-Phase Commit (2PC) or Saga pattern to ensure atomicity across systems.
+
+Q: What is replication lag?
+✅ A:
+The time delay between when data is written on the primary node and when it appears on replicas.
+To handle it, use read-after-write consistency or eventual consistency models.
+
+🧱 4. Data Modeling & Indexing
+
+Q: When should you use an index?
+✅ A:
+Use indexes to speed up queries that frequently filter, sort, or join large datasets. 
+Avoid excessive indexing since it slows down insert and update operations.
+
+Q: What is a composite index?
+✅ A:
+An index on multiple columns. It improves performance for queries filtering by multiple fields in order (e.g., WHERE country = 'US' AND city = 'NY').
+
+Q: What is a materialized view?
+✅ A:
+A precomputed, stored result of a query that improves performance for complex aggregations or joins.
+
+Q: How would you design an audit log?
+✅ A:
+Use a dedicated table or database with append-only inserts. Include fields like entity_id, change_type, old_value, new_value, and timestamp.
+
+🕸 5. Distributed Databases
+
+Q: Explain leader-follower replication.
+✅ A:
+The leader handles writes and replicates changes to followers. Followers handle reads to offload traffic. If the leader fails, one follower is promoted.
+
+Q: What is leaderless replication?
+✅ A:
+All nodes can accept writes, and conflicts are resolved via quorum or version vectors (used in Cassandra or DynamoDB).
+
+Q: Explain the Raft algorithm.
+✅ A:
+Raft is a distributed consensus algorithm ensuring multiple nodes agree on a log of updates even with failures, maintaining consistency across a cluster.
+
+Q: Compare Google Spanner and DynamoDB.
+✅ A:
+
+Spanner: Relational, globally consistent, uses atomic clocks for true-time synchronization.
+
+DynamoDB: NoSQL key-value store, highly available, eventually consistent, optimized for horizontal scale.
+
+
+
+🧾 6. Caching & Optimization
+
+Q: When to cache query results vs entity data?
+✅ A:
+
+Query cache: For repeated read patterns (like homepage feeds).
+
+Entity cache: For frequently accessed items like user profiles or configurations.
+
+
+Q: How do you handle cache invalidation?
+✅ A:
+
+Write-through: Write to cache and DB simultaneously.
+
+Write-back: Write to cache first, flush later.
+
+TTL (Time-to-live): Automatically expire stale data.
+
+Q: Difference between Redis cache and DB index?
+✅ A:
+An index speeds up queries inside the DB, while Redis serves data from memory, completely bypassing DB reads.
+
+Q: How to measure cache effectiveness?
+✅ A:
+Monitor cache hit ratio = hits / (hits + misses). Aim for >80% for high efficiency.
+
+
+
+🔐 7. Reliability & Recovery
+
+Q: How do you design a backup and restore plan?
+✅ A:
+Use a combination of full backups (weekly) and incremental backups (daily). Store backups in a remote region and regularly test restoration.
+
+Q: What is database failover?
+✅ A:
+Automatic switching to a standby replica if the primary node fails, ensuring high availability and minimal downtime.
+
+Q: How to perform zero-downtime schema migrations?
+✅ A:
+Use blue-green deployments, shadow writes, and online schema migration tools like gh-ost or pt-online-schema-change.
+
+Q: When to use soft delete vs hard delete?
+✅ A:
+
+Soft delete: Mark records as deleted (keep for recovery/audit).
+
+Hard delete: Permanently remove data for storage optimization.
+
+📊 8. Real-World Design Scenarios
+
+Q: Design a database for a social media feed.
+✅ A:
+Use PostgreSQL or Cassandra.
+
+Tables: users, posts, followers, likes.
+
+Fan-out-on-write or fan-out-on-read strategy.
+
+Use Redis for hot feeds and Kafka for async updates.
+
+Q: Design a shopping cart system.
+✅ A:
+Use Redis for temporary cart data (fast access) and PostgreSQL for finalized orders.
+Ensure atomic checkout using transactions and event-driven order creation.
+
+Q: How to support multi-tenant database design?
+✅ A:
+
+Shared DB, shared schema — fastest, least isolated.
+Shared DB, separate schema — good balance.
+Separate DB per tenant — maximum isolation, more overhead.
+
+Q: How to handle high write throughput (like logs)?
+✅ A:
+Use batch inserts, append-only tables, or a write-optimized DB like ClickHouse. Stream writes via Kafka for async processing.
+
+🧩 9. Quick Reference Table
+Topic	Key Points
+SQL vs NoSQL	SQL = strong consistency, NoSQL = scalability
+Sharding	Split data into smaller shards
+Replication	Duplicates for reads & fault tolerance
+CAP Theorem	Choose 2: Consistency, Availability, Partition tolerance
+Caching	Redis / Memcached reduce DB load
+Index	Speeds reads, slows writes
+Raft	Ensures cluster-wide consensus
+Denormalization	Optimize for reads
+Failover	Automatic recovery from node failure
+Schema migration	Online, zero downtime

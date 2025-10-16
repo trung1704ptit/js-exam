@@ -1,0 +1,303 @@
+Table === Collection
+
+
+// insert ------------------------------------------------
+db.posts.insertOne({
+    tilte: "name",
+    body: "body of post"
+})
+
+
+db.posts.insertMany([
+    {
+        title: "post title 2",
+        body: "body 2"
+    },
+    {
+        title: "title2",
+        "body": "body2"
+    }
+])
+
+
+// find ------------------------------------------
+db.posts.find() // find all
+
+db.posts.findOne() // if left it empty it will return the first document if finds
+
+db.posts.find({
+    category: "News"
+})
+
+// find with projection - describe which fields to be included in the results.
+db.posts.find({}, { tilte: 1, date: 1})
+
+// find and exlude the _id
+db.posts.find({}, { _id: 0, title: 1, date: 1 })
+
+db.posts.find({}, { category: 0 })
+
+
+
+// update -------------------------------------------
+updateOne()
+db.posts.updateOne({ title: "Post title 1", { $set: { likes: 2  }}})
+
+db.posts.updateOne(
+    {
+        title: "Post title 5",
+    }, {
+        $set: {
+            title: "post title 5",
+            body: "Body of post",
+            category: "event",
+            likes: 5,
+            date: Date()
+        }
+    },
+    {
+        upsert: true
+    }
+)
+
+updateMany()
+
+db.posts.updateMany({}, $inc: { likes: 1})
+
+// Delete
+db.posts.deleteOne({ title: "Post of title 5"})
+
+// Query operators --------------------------------------------
+$eq: values are equal
+$ne: values are not equal
+$gt: value is greeter than another value
+$gte: value is greater than or equal to another value
+$lt: value is less than another value
+$lte: value is less than or equal to another value
+$in: value is matched
+
+Logical:
+$and: returns documents where both queries match
+$or: returns documents where either query matches
+$nor: returns document where both queries fail to match
+$not: returns documents where the query does not match
+
+Evaluation:
+$regex: Allows the use of the regular expression
+$text: perform a text search
+$where: uses javascript expression to match document
+
+// fields:
+$currentDate: set field value to the current date
+$inc: increments the field value
+$rename: rename the the field
+$set: set the value of field
+$unset: removes the field from document
+
+Array:
+$addToSet: add distinct elements to an array
+$pop: removes the first or last element of an array
+$pull: remove all element from an array that match the query
+$push: adds an element to an array
+
+db.users.updateOne(
+    { _id: 1},
+    {
+        $addToSet: {
+            hobbies: "reading"
+        }
+    }
+)
+
+db.users.updateOne(
+    {
+        _id: 1
+    },
+    {
+        $pop: {
+            hobbies: 1
+        }
+    }
+)
+
+db.posts.updateOne(
+    {
+        _id: 1
+    },
+    {
+        $pull: {
+            scores: {
+                $lt: 50
+            }
+        }
+    }
+)
+
+// Aggregation
+db.posts.aggregate([
+    // state 1: only find documents that have more that 1 like
+    {
+        $match: {
+            likes: {
+                $gt: 1
+            }
+        }
+    },
+    // stage 2: Group document by category and sum each categories likes
+    {
+        $group: {
+            _id: "$category",
+            totalLikes: {
+                $sum: "$likes"
+            }
+        }
+    }
+])
+
+
++++ Group
+db.listingAndReviews.aggregate(
+    [
+        {
+            $group: {
+                _id: "$property_type"
+            }
+        }
+    ]
+)
+
++++ Limit
+db.movies.aggregate([
+    {
+        $limit: 1
+    }
+])
+
++++ $project
+db.restaurants.aggregate([
+    {
+        $project: {
+            "name": 1,
+            "cuisine": 1,
+            "address": 1
+        }
+    },
+    {
+        $limit: 5
+    }
+])
+
+++sort
+db.listingsAndReviews.aggregate([
+    {
+        $sort: {
+            "accomodates": -1
+        }
+    }, 
+    {
+        $project: {
+            "name": 1,
+            "accommodates": 1
+        }
+    },
+    {
+        $limit: 5
+    }
+])
+
+++match
+db.listingsAndReview.aggregate([
+    { 
+        $match: {
+            property_type: "House"
+        }
+    }, {
+        $limit: 2,
+    },
+    {
+        $project: {
+            "name": 1,
+            "bedrooms": 1,
+            "price": 1
+        }
+    }
+])
+
+++ $addFields
+db.restaurants.aggregate([
+    {
+        $addFields: {
+            avgGrade: {
+                $avg: "$grades.score"
+            }
+        }
+    },
+    {
+        "$project": {
+            "name": 1,
+            "avgGrade": 1
+        }
+    }, {
+        $limit: 5
+    }
+])
+
+++ $count:
+db.restaurants.aggregate([
+    {
+        $match: {
+            "cuisine": "Chinise"
+        }
+    },
+    {
+        "$count": "totalChinese" // count numbers of records, assign it to the totalChinese var
+    }
+])
+
+++ Lookup
+This aggegation state performs a left outer join to a collection in the same database
+ 4 required fields:
+    - from
+    - localField
+    - foreignField
+    - as
+
+db.comments.aggregate([
+    {
+        $lookup: {
+            from: "movies",
+            localField: "movie_id",
+            foreignField: "_id",
+            as: "movie_details"
+        }
+    }
+])
+
+đoạn code trên là từ bảng comments, đi join với bảng movies, dựa trên movie_id là khóa, trường _id là foreignkey của movies và comments
+
+
+++ $out
+
+
+--------------------------------------------------------------------------------------
+Search
+db.movie.aggregate([
+    {
+        $search: {
+            index:  "default",
+            text: {
+                query: "star wars",
+                path: "title"                
+            }
+        }
+    },
+    {
+        $project: {
+            title: 1,
+            year: 1
+        }
+    }
+])
+
+
+--------------------------------------------------------------------------------------
